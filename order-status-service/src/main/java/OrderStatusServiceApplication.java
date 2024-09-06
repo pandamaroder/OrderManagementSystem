@@ -1,12 +1,10 @@
-package com.example.orderservice;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class OrderServiceApplication {
+public class OrderStatusServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OrderServiceApplication.class, args);
+        SpringApplication.run(OrderStatusServiceApplication.class, args);
     }
 }
