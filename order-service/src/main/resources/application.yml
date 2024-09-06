@@ -28,9 +28,11 @@ spring:
         trust-store-password: your-truststore-password
         protocol: TLS
       #transaction-id-prefix: my-transaction
-  consumer:
-    client-id: order-status-listener
+    consumer:
+      client-id: order-status-listener
 
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
 
 springdoc:
     swagger-ui:
