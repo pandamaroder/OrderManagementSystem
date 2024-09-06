@@ -1,0 +1,42 @@
+server:
+  port: 8086
+  servlet:
+      context-path: /
+      forward-headers-strategy: framework
+
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+
+      client-id: order-status-producer
+      compression-type: gzip
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+
+
+    consumer:
+
+      client-id: order-listener
+      group-id: order-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+
+
+     # transaction-id-prefix: my-transaction
+
+
+
+springdoc:
+    swagger-ui:
+        tagsSorter: alpha
+        operations-sorter: method
+
+swagger:
+    info:
+        title: "API News Service"
+        description: "Backend сервис для приложения «Новостной сервис»"

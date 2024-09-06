@@ -1,0 +1,43 @@
+server:
+  port: 8086
+  servlet:
+      context-path: /
+      forward-headers-strategy: framework
+
+books:
+    periodForNewBooks: 14
+spring:
+  kafka:
+    producer:
+      bootstrap-servers: localhost:9092
+      client-id: order-producer
+      buffer-memory: 33554432
+      batch-size: 16384
+      acks: 1
+      compression-type: gzip
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      retries: 3
+      security:
+        protocol: SSL
+      ssl:
+        key-store-location: classpath:keystore.jks
+        key-store-password: your-keystore-password
+        key-password: your-key-password
+        trust-store-location: classpath:truststore.jks
+        trust-store-password: your-truststore-password
+        protocol: TLS
+      #transaction-id-prefix: my-transaction
+  consumer:
+    client-id: order-status-listener
+
+
+springdoc:
+    swagger-ui:
+        tagsSorter: alpha
+        operations-sorter: method
+
+swagger:
+    info:
+        title: "API News Service"
+        description: "Backend сервис для приложения «Новостной сервис»"
