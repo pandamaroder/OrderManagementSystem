@@ -4,11 +4,11 @@ plugins {
     id("com.github.ben-manes.versions") version "0.51.0"
 }
 
-description = "Experiments with Java"
+description = "Kafka with Spring Boot Basics "
 
 allprojects {
-    group = "io.github.mfvanek"
-    version = "0.2.0"
+    group = "com.github.pandamaroder"
+    version = "0.1.0"
 
     repositories {
         mavenLocal()
@@ -16,11 +16,6 @@ allprojects {
     }
 }
 
-tasks {
-    wrapper {
-        gradleVersion = "8.7"
-    }
-}
 
 fun isNonStable(version: String): Boolean {
     val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.uppercase().contains(it) }

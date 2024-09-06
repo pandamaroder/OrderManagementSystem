@@ -6,7 +6,7 @@ plugins {
     id("pmd")
     id("jacoco")
     id("org.sonarqube") version "4.0.0.2929"
-    id("checkstyle")
+
 
     //id("com.github.spotbugs")
 }

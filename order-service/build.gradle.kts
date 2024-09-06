@@ -1,5 +1,4 @@
 
-
 plugins {
     id("java")
     id("org.springframework.boot") version "3.2.6"
@@ -7,11 +6,22 @@ plugins {
     id("pmd")
     id("jacoco")
     id("org.sonarqube") version "4.0.0.2929"
-    id("checkstyle")
+
 
     //id("com.github.spotbugs")
 }
+group = "com.example"
+version = "0.0.1-SNAPSHOT"
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+    maven { url = uri("https://repo.spring.io/milestone") }
+    maven { url = uri("https://repo.spring.io/snapshot") }
+}
 dependencies {
     implementation(project(":common"))
 
@@ -27,7 +37,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.kafka:spring-kafka")
 
-    testImplementation("org.testcontainers:zookeeper:1.18.3")
+    implementation ("org.threeten:threeten-extra:1.6.0")
     testImplementation("org.testcontainers:kafka:1.18.3")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -37,7 +47,5 @@ dependencies {
     testImplementation("org.awaitility:awaitility")
 }
 
-springBoot {
-    buildInfo()
-}
+
 
