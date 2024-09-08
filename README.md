@@ -9,7 +9,7 @@
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=pandamaroder_ContactRegistry&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=pandamaroder_ContactRegistry)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=pandamaroder_ContactRegistry&metric=coverage)](https://sonarcloud.io/summary/new_code?id=pandamaroder_ContactRegistry)
 
-MVC сервис для приложения «Новостной сервис» c кешированием
+Многомодульный проект для демо по Кафке 
 
 **Технологии:** Java, Spring Boot, Kafka
 
@@ -27,7 +27,7 @@ MVC сервис для приложения «Новостной сервис»
 
 
 #Тестирование эндпоинтов:
-Для проверки основного контроллера сервиса - необходимо выполнить запрос : http://localhost:8086/books/lastUpdates?now=2024-08-11
+Для проверки основного контроллера сервиса - необходимо выполнить запрос : http://localhost:8080/
 
 
 # Локальный запуск:
@@ -37,8 +37,25 @@ MVC сервис для приложения «Новостной сервис»
 docker-compose -f docker-compose-env-only.yml up
 ```
 
+#Cостав 
+1. order-service.
+  1.1 эндпоинт, на который приходит POST-запрос с сущностью Order.
+    Сущность Order состоит из двух полей: String product и Integer quantity. Эндпоинт принимает сущность и отправляет в Kafka
+    событие OrderEvent (которое также состоит из полей product и quantity). 
+  2.2 Событие отправляется в топик order-topic
+  2.3 KafkaListener, который будет слушать события по топику order-status-topic
 
-#Тестирование редиса:
+2. order-status-service — 
+   2.1 KafkaListener, который слушает топик order-topic. Когда в слушатель приходит событие, 
+    происходит отправка другого события в топик order-status-service
+   2.2 Kafka Producer  в топик order-status-service. Это
+   событие состоит из полей String status и Instat date.
+   В поле status записывается произвольная строка (например, CREATED или PROCESS), 
+    в поле date — текущая дата
+
+3. common - подключаемый модуль несамостоятельный. Общий пакет для общей бизнес - сущности 
+4. test-config
+
 
 
 #Дополнительные материалы 
