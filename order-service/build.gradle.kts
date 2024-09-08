@@ -27,6 +27,7 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.projectlombok:lombok:1.18.20")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:junit-jupiter")
@@ -36,15 +37,12 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.kafka:spring-kafka")
-
     implementation ("org.threeten:threeten-extra:1.6.0")
-    testImplementation("org.testcontainers:kafka:1.18.3")
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-
-
-    testImplementation("org.springframework.kafka:spring-kafka-test")
-    testImplementation("org.awaitility:awaitility")
+    testImplementation("org.springframework.boot:spring-boot-starter-test") // Стартовый пакет для тестов
+    testImplementation("org.testcontainers:kafka:1.18.3") // Testcontainers для Kafka
+    testImplementation("org.springframework.kafka:spring-kafka-test") // Тестирование Kafka
+    testImplementation("org.awaitility:awaitility") // Асинхронное тестирование
 }
 
 
