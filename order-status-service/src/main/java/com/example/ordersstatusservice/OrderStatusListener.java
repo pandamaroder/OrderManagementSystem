@@ -23,8 +23,6 @@ public class OrderStatusListener {
 
 
 // механизм горизонт масштабирования - группа консьюмеров - разделение по вычитке - спомошь. партиций 10
-   // добавить спел на топик ней м
-
     @KafkaListener(topics = "order-topic")
     public void listen(OrderEvent orderEvent) {
         log.info("Received order event: {}", orderEvent);
@@ -33,7 +31,6 @@ public class OrderStatusListener {
         // Создаем новое событие статуса заказа
         OrderStatusEvent orderStatusEvent = new OrderStatusEvent("PROCESSED", now);
 
-       // acknowledgment.acknowledge();
         // Отправляем событие в топик order-status-topic
         kafkaTemplate.send("order-status-topic", orderStatusEvent);
 

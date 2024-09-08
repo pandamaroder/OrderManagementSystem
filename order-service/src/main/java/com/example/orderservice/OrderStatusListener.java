@@ -5,7 +5,9 @@ import com.example.common.OrderEvent;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,16 +17,23 @@ public class OrderStatusListener {
 
     private static final Logger log = LoggerFactory.getLogger(OrderStatusListener.class);
 
+
+    @Value("${spring.kafka.topics.order-status}")
+    private String orderStatusTopic;
     /*@KafkaListener в Spring используется для создания слушателей (consumers) Kafka.
     Этот слушатель автоматически получает сообщения
     из указанных топиков Kafka.*/
 
 
-    @KafkaListener(topics = "order-status-topic")
-    public void listen(ConsumerRecord<String, OrderEvent> record) {
+    @KafkaListener(topics = "#{@orderStatusTopic}")
+    public void listen(ConsumerRecord<String, OrderEvent> record, Acknowledgment acknowledgment) {
+        // Обработка сообщения
         log.info("Received message: {}", record.value());
         log.info("Key: {}; Partition: {}; Topic: {}, Timestamp: {}",
                 record.key(), record.partition(), record.topic(), record.timestamp());
+
+        // Подтверждение смещения после успешной обработки
+        acknowledgment.acknowledge();
     }
 
 /*    public void listen(OrderEvent message, @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
