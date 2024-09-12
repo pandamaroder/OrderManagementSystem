@@ -7,11 +7,8 @@ server:
 spring:
   kafka:
     bootstrap-servers: localhost:9092
-    topics:
-      order-status: order-status-topic
-      order: order-topic
-    key-serializer: org.apache.kafka.common.serialization.StringSerializer
-    value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    template:
+      default-topic: order-topic
     producer:
       bootstrap-servers: localhost:9092
       client-id: order-producer
@@ -30,6 +27,13 @@ spring:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
       - org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration
+
+
+kafka:
+  topics:
+    order-status: order-status-topic
+    order: order-topic
+
 
 springdoc:
     swagger-ui:
