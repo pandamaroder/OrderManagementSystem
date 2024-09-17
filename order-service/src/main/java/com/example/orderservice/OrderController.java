@@ -16,8 +16,7 @@ public class OrderController {
     @Autowired
     private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
 
-
-
+    //Producer
     @PostMapping("/order")
     public void createAndPublishOrder(@RequestBody OrderEvent order) throws ExecutionException, InterruptedException {
 

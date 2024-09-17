@@ -5,7 +5,10 @@ import com.example.orderservice.support.KafkaConsumerUtils;
 import com.example.orderservice.support.TestBase;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Header;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -14,8 +17,6 @@ import org.springframework.boot.test.system.OutputCaptureExtension;
 import org.springframework.http.MediaType;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 
-import java.nio.charset.StandardCharsets;
-import java.time.Clock;
 import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -57,24 +58,20 @@ public class OrderControllerTest extends TestBase {
                 .exchange()
                 .expectStatus().isOk();
         assertThat(output.getAll())
-                .contains("Called method getNow. TraceId = ")
-                .contains("Awaiting acknowledgement from Kafka");
-
+                .contains("Received message:")
+                .contains("[Producer clientId=order-producer-1] Cluster ID:")
+                .contains("Key: null; Partition: 0; Topic: order-topic");
 
         final var received = consumerRecords.poll(10, TimeUnit.SECONDS);
         assertThat(received).isNotNull();
-        assertThat(received.value()).startsWith("Current time = ");
+        assertThat(received.value()).startsWith("{\"product\":");
         final Header[] headers = received.headers().toArray();
         final var headerNames = Arrays.stream(headers)
                 .map(Header::key)
                 .toList();
         assertThat(headerNames)
-                .hasSize(2)
-                .containsExactlyInAnyOrder("traceparent", "b3");
-        final var headerValues = Arrays.stream(headers)
-                .map(Header::value)
-                .map(v -> new String(v, StandardCharsets.UTF_8))
-                .toList();
+                .hasSize(1)
+                .containsExactlyInAnyOrder("__TypeId__");
 
 
        /* Awaitility

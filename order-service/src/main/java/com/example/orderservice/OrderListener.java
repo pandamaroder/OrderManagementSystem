@@ -5,28 +5,24 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.support.Acknowledgment;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrderStatusListener {
+public class OrderListener {
 
     /*Этот компонент будет слушать топик order-status-topic и выводить информацию о сообщении:*/
     /*@KafkaListener в Spring используется для создания слушателей (consumers) Kafka.
     Этот слушатель автоматически получает сообщения
     из указанных топиков Kafka.*/
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OrderStatusListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderListener.class);
 
     @KafkaListener(topics = "${spring.kafka.template.default-topic}")
-    public void listen(ConsumerRecord<String, OrderEvent> record, Acknowledgment acknowledgment) {
+    public void listen(ConsumerRecord<String, OrderEvent> record) {
         // Обработка сообщения
         LOGGER.info("Received message: {}", record.value());
         LOGGER.info("Key: {}; Partition: {}; Topic: {}, Timestamp: {}",
                 record.key(), record.partition(), record.topic(), record.timestamp());
-
-        // Подтверждение смещения после успешной обработки
-        acknowledgment.acknowledge();
     }
 
 

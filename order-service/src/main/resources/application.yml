@@ -10,14 +10,14 @@ spring:
     template:
       default-topic: order-topic
     producer:
-      bootstrap-servers: localhost:9092
       client-id: order-producer
       buffer-memory: 33554432
       batch-size: 16384
       acks: 1
       compression-type: gzip
       retries: 3
-
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
       client-id: order-status-listener
       enable-auto-commit: false
