@@ -1,8 +1,8 @@
 package com.example.orderservice.controller;
 
 import com.example.common.OrderEvent;
-import com.example.orderservice.support.KafkaConsumerUtils;
-import com.example.orderservice.support.TestBase;
+import com.example.orderservice.KafkaConsumerUtils;
+import com.example.orderservice.TestBase;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.header.Header;
 import org.junit.jupiter.api.AfterAll;
@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.boot.test.system.CapturedOutput;
 import org.springframework.boot.test.system.OutputCaptureExtension;
+import org.springframework.core.env.Environment;
 import org.springframework.http.MediaType;
 import org.springframework.kafka.listener.KafkaMessageListenerContainer;
 
@@ -32,10 +33,11 @@ public class OrderControllerTest extends TestBase {
     private KafkaMessageListenerContainer<String, String> container;
     @Autowired
     private KafkaProperties kafkaProperties;
-
+    @Autowired
+    Environment environment;
     @BeforeAll
     void setUpKafkaConsumer() {
-        container = KafkaConsumerUtils.setUpKafkaConsumer(kafkaProperties, consumerRecords);
+        container = KafkaConsumerUtils.setUpKafkaConsumer(kafkaProperties,   consumerRecords);
     }
 
     @AfterAll
@@ -74,17 +76,7 @@ public class OrderControllerTest extends TestBase {
                 .containsExactlyInAnyOrder("__TypeId__");
 
 
-       /* Awaitility
-                .await()
-                .atMost(10, TimeUnit.SECONDS)
-                .pollInterval(Duration.ofMillis(500L))
-                .until(() -> countRecordsInTable() >= 1L);
-        assertThat(output.getAll())
-                .contains("Received record: " + received.value() + " with traceId " + traceId);
-        final String messageFromDb = jdbcTemplate.queryForObject("select message from otel_demo.storage where trace_id = :traceId",
-                Map.of("traceId", traceId), String.class);
-        assertThat(messageFromDb)
-                .isEqualTo(received.value());*/
+
     }
 
 

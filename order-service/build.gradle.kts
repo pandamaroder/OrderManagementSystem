@@ -8,7 +8,7 @@ plugins {
     id("org.sonarqube") version "4.0.0.2929"
     id("checkstyle")
     id("net.ltgt.errorprone") version "3.1.0"
-    //id("io.freefair.lombok")
+    //id("io.freefair.lombok") - не могу скачать!
     //id("com.github.spotbugs")
 }
 group = "com.example"
@@ -25,6 +25,7 @@ repositories {
 }
 dependencies {
     implementation(project(":common"))
+    implementation(project(":test-config"))
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     checkstyle("com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1")

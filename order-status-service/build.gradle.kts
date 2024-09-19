@@ -25,7 +25,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.kafka:spring-kafka")
 
-    testImplementation("org.testcontainers:zookeeper:1.18.3")
+
     testImplementation("org.testcontainers:kafka:1.18.3")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")

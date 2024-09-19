@@ -1,17 +1,13 @@
 package com.example.orderservice;
 
-
-//import jakarta.annotation.Nonnull;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.boot.test.context.SpringBootTest;
-//import org.springframework.boot.test.context.TestConfiguration;
-//import org.springframework.boot.test.web.server.LocalServerPort;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Primary;
-//import org.springframework.test.context.ActiveProfiles;
-//import org.springframework.test.context.ContextConfiguration;
-//import org.springframework.test.web.reactive.server.WebTestClient;
-//import org.threeten.extra.MutableClock;
+import jakarta.annotation.Nonnull;
+import org.junit.jupiter.api.AfterEach;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.threeten.extra.MutableClock;
 
 import java.time.*;
 
@@ -19,8 +15,37 @@ import java.time.*;
 
 public abstract class TestBase {
 
-
     static final LocalDateTime BEFORE_MILLENNIUM = LocalDateTime.of(1999, Month.DECEMBER, 31, 23, 59, 59);
+    @Autowired
+    protected WebTestClient webTestClient;
 
+    static Instant getTestInstant() {
+        return BEFORE_MILLENNIUM.toInstant(ZoneOffset.UTC);
+    }
 
+    @AfterEach
+    void resetClock() {
+        mutableClock.setInstant(getTestInstant());
+    }
+
+    @Autowired
+    protected MutableClock mutableClock;
+
+    @Autowired
+    protected Clock clock;
+
+    @TestConfiguration
+    static class CustomClockConfiguration {
+
+        @Bean
+        public MutableClock mutableClock() {
+            return MutableClock.of(getTestInstant(), ZoneOffset.UTC);
+        }
+
+        @Bean
+        @Primary
+        public Clock fixedClock(@Nonnull final MutableClock mutableClock) {
+            return mutableClock;
+        }
+    }
 }

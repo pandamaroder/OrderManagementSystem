@@ -17,17 +17,13 @@ public class OrderListener {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderListener.class);
 
-    @KafkaListener(topics = "${spring.kafka.template.default-topic}")
+    @KafkaListener(topics = "${spring.kafka.topics.order-status}")
     public void listen(ConsumerRecord<String, OrderEvent> record) {
         // Обработка сообщения
         LOGGER.info("Received message: {}", record.value());
         LOGGER.info("Key: {}; Partition: {}; Topic: {}, Timestamp: {}",
                 record.key(), record.partition(), record.topic(), record.timestamp());
     }
-
-
-
-
 
 /*    public void listen(OrderEvent message, @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
                        @Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,

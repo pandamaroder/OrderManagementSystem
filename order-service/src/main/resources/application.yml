@@ -9,6 +9,8 @@ spring:
     bootstrap-servers: localhost:9092
     template:
       default-topic: order-topic
+    topics:
+      order-status: order-status-topic
     producer:
       client-id: order-producer
       buffer-memory: 33554432
@@ -22,12 +24,6 @@ spring:
       client-id: order-status-listener
       enable-auto-commit: false
       group-id: order-status-group
-
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-      - org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration
-
 
 kafka:
   topics:
