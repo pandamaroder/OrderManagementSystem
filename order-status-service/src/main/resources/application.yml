@@ -8,13 +8,15 @@ server:
 spring:
   kafka:
     bootstrap-servers: localhost:9092
+    template:
+      default-topic: order-status-topic
     topics:
-      order-status: order-status-topic
       order: order-topic
     producer:
       client-id: order-status-producer
       compression-type: gzip
-
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
     consumer:
       client-id: order-listener
@@ -22,15 +24,6 @@ spring:
 
       auto-offset-reset: earliest
       enable-auto-commit: false
-
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-      - org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration
-
-     # transaction-id-prefix: my-transaction
-
-
 
 springdoc:
     swagger-ui:
@@ -41,3 +34,4 @@ swagger:
     info:
         title: "Order Status Service"
         description: "Backend сервис отслеживания новых заказов и формрования статуса заказа"
+

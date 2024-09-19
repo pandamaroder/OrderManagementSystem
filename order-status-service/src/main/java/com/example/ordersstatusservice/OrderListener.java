@@ -1,29 +1,23 @@
 package com.example.ordersstatusservice;
 
-
 import com.example.common.OrderEvent;
+import com.example.common.OrderStatusEvent;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-public class OrderStatusListener {
+public class OrderListener {
 
-    private static final Logger log = LoggerFactory.getLogger(OrderStatusListener.class);
-
-    @Autowired
     private final KafkaTemplate<String, OrderStatusEvent> kafkaTemplate;
 
-
-// механизм горизонт масштабирования - группа консьюмеров - разделение по вычитке - спомошь. партиций 10
-    @KafkaListener(topics = "order-topic")
+    @KafkaListener(topics = "${spring.kafka.topics.order}")
     public void listen(OrderEvent orderEvent) {
         log.info("Received order event: {}", orderEvent);
         LocalDateTime now = LocalDateTime.now();

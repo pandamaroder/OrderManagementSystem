@@ -9,6 +9,8 @@ spring:
     bootstrap-servers: localhost:9092
     template:
       default-topic: order-topic
+    topics:
+      order-status: order-status-topic
     producer:
       client-id: order-producer
       buffer-memory: 33554432
@@ -23,18 +25,6 @@ spring:
       enable-auto-commit: false
       group-id: order-status-group
 
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-      - org.springframework.boot.autoconfigure.r2dbc.R2dbcAutoConfiguration
-
-
-kafka:
-  topics:
-    order-status: order-status-topic
-    order: order-topic
-
-
 springdoc:
     swagger-ui:
         tagsSorter: alpha
@@ -42,5 +32,5 @@ springdoc:
 
 swagger:
     info:
-        title: "API News Service"
-        description: "Backend сервис для приложения «Новостной сервис»"
+        title: "Каfka Vanil with basic broker's features - Order Service"
+        description: "Модуль по созданию новых заказов и вычитывания статуса новых заказов"

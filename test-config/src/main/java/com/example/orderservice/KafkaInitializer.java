@@ -1,4 +1,4 @@
-package com.example.orderservice.support;
+package com.example.orderservice;
 
 
 import jakarta.annotation.Nonnull;

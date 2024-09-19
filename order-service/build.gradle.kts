@@ -25,15 +25,13 @@ repositories {
 }
 dependencies {
     implementation(project(":common"))
+    implementation(project(":test-config"))
+
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     checkstyle("com.thomasjensen.checkstyle.addons:checkstyle-addons:7.0.1")
-
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.projectlombok:lombok:1.18.20")
-
-
 
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -43,14 +41,11 @@ dependencies {
     errorprone("com.google.errorprone:error_prone_core:2.27.1")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test") // Стартовый пакет для тестов
-    testImplementation("org.testcontainers:kafka:1.18.3") // Testcontainers для Kafka
-    testImplementation("org.springframework.kafka:spring-kafka-test") // Тестирование Kafka
     testImplementation("org.awaitility:awaitility") // Асинхронное тестирование
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation ("org.springframework.boot:spring-boot-starter-webflux")
 }
-
 
 tasks.withType<JavaCompile>().configureEach {
     options.errorprone {
@@ -61,7 +56,7 @@ tasks.withType<JavaCompile>().configureEach {
 tasks {
 
     test {
-        //dependsOn(checkstyleTest, checkstyleMain, pmdMain, pmdTest)
+        dependsOn(checkstyleTest, checkstyleMain, pmdMain, pmdTest)
         testLogging.showStandardStreams = false // set to true for debug purposes
         useJUnitPlatform()
         finalizedBy(jacocoTestReport, jacocoTestCoverageVerification)
@@ -102,12 +97,6 @@ checkstyle {
     maxErrors = 0
 }
 
-
-
-
 jacoco {
     toolVersion = "0.8.12"
 }
-
-
-

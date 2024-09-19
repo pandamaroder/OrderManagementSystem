@@ -1,6 +1,6 @@
-package com.example.orderservice.support;
+package com.example.orderservice;
 
-import lombok.experimental.UtilityClass;
+
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
@@ -13,7 +13,7 @@ import org.springframework.kafka.test.utils.KafkaTestUtils;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
-@UtilityClass
+//@UtilityClass - не работает
 public class KafkaConsumerUtils {
 
     public static KafkaMessageListenerContainer<String, String> setUpKafkaConsumer(

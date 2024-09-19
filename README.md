@@ -174,3 +174,12 @@ kafka-topics.sh --alter \
 Автоматическое Управление: Kafka автоматически управляет закреплением партиций за консьюмерами, а также реагирует на изменения, такие как добавление или удаление консьюмеров из группы. При этом Kafka может перераспределить партиции между консьюмерами, чтобы обеспечить равномерное распределение нагрузки.
 
 Сохранение Состояния: Позиция (offset) чтения для каждой партиции хранится в записной группе (offset storage), что позволяет консьюмерам продолжать чтение с того места, где они остановились в случае сбоя или перезапуска.
+OrderListener.java
+/*    public void listen(OrderEvent message, @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) String key,
+@Header(KafkaHeaders.RECEIVED_PARTITION_ID) int partition,
+@Header(KafkaHeaders.RECEIVED_TOPIC) String topic,
+@Header(KafkaHeaders.RECEIVED_TIMESTAMP) long timestamp) {
+log.info("Received message: {}", message);
+log.info("Key: {}; Partition: {}; Topic: {}, Timestamp: {}", key, partition, topic, timestamp);
+}*/
+// механизм горизонт масштабирования - группа консьюмеров - разделение по вычитке - спомошь. партиций 10
