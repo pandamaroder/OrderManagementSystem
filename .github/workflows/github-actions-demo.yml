@@ -48,10 +48,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew build
-
-      - name: Archive test report
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-report
-          path: build/reports/tests/test/
