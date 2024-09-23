@@ -29,7 +29,8 @@ public class OrderControllerTest extends TestBase {
 
     @BeforeAll
     void setUpKafkaConsumer() {
-        container = KafkaConsumerUtils.setUpKafkaConsumer(kafkaProperties, consumerRecords);
+        container = KafkaConsumerUtils
+            .setUpKafkaConsumer(kafkaProperties.getTemplate().getDefaultTopic(), kafkaProperties, consumerRecords);
     }
 
     @AfterAll
@@ -42,10 +43,12 @@ public class OrderControllerTest extends TestBase {
     @Test
     void postOrderEndPointTest() {
         final OrderEvent orderEvent = new OrderEvent("product", 1);
-        webTestClient.post().uri("/order").accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(orderEvent)
-                .exchange().expectStatus()
-                .isOk();
+        webTestClient.post().uri("/order")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .bodyValue(orderEvent)
+            .exchange()
+            .expectStatus()
+            .isOk();
     }
 }

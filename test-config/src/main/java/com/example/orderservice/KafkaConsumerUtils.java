@@ -17,9 +17,10 @@ import java.util.concurrent.BlockingQueue;
 public class KafkaConsumerUtils {
 
     public static KafkaMessageListenerContainer<String, String> setUpKafkaConsumer(
-             final KafkaProperties kafkaProperties,
-             final BlockingQueue<ConsumerRecord<String, String>> consumerRecords) {
-        final var containerProperties = new ContainerProperties(kafkaProperties.getTemplate().getDefaultTopic());
+        final String topic,
+        final KafkaProperties kafkaProperties,
+        final BlockingQueue<ConsumerRecord<String, String>> consumerRecords) {
+        final var containerProperties = new ContainerProperties(topic);
         final Map<String, Object> consumerProperties = KafkaTestUtils.consumerProps(KafkaInitializer.getBootstrapSevers(), "test-group", "false");
         //consumerProperties.put(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, "SASL_PLAINTEXT");
                                    

@@ -13,6 +13,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.kafka.core.KafkaTemplate;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,13 +29,13 @@ public class OrderStatusListenerTest extends TestBase {
     private Environment environment;
 
     @Test
-    public void testKafkaListenerReceivesMessage(CapturedOutput output) throws InterruptedException {
+    public void testKafkaListenerReadOrderStatus(CapturedOutput output) throws InterruptedException, ExecutionException {
 
         final OrderStatusEvent orderStatusEvent = new OrderStatusEvent("Order Shipped", LocalDateTime.now());
 
         final String orderStatusTopic = environment.getProperty("spring.kafka.topics.order-status");
         //отправляем в  топик через тестовый продьюсер
-        kafkaTemplate.send(orderStatusTopic, orderStatusEvent);
+        kafkaTemplate.send(orderStatusTopic, orderStatusEvent).get();
         //ждем запись в лог
         Awaitility.await()
                 .atMost(10, TimeUnit.SECONDS)
@@ -42,7 +43,7 @@ public class OrderStatusListenerTest extends TestBase {
                 .untilAsserted(() -> {
                     // Проверяем, что лог содержит нужные сообщения
                     assertThat(output.getOut())
-                            //.contains("Received message: OrderStatusEvent[status=Order Shipped")
+                            //.contains("Received message: OrderStatusEvent[status=Order Shipped") // сделать более читаемую конструкцию
                             .contains("Key: null; Partition: 0; Topic: " + orderStatusTopic);
                 });
     }

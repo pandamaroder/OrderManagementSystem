@@ -38,7 +38,8 @@ public class OrderProducerTest extends TestBase {
     // сообщения в очередь consumerRecords, из которой тест может забирать сообщения для проверки.
     @BeforeAll
     void setUpKafkaConsumer() {
-        container = KafkaConsumerUtils.setUpKafkaConsumer(kafkaProperties, consumerRecords);
+        container = KafkaConsumerUtils
+            .setUpKafkaConsumer(kafkaProperties.getTemplate().getDefaultTopic(), kafkaProperties, consumerRecords);
     }
 
     @AfterAll

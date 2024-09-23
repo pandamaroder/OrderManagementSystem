@@ -21,10 +21,8 @@ public class OrderController {
     //Producer
     @PostMapping("/order")
     public void createAndPublishOrder(@RequestBody OrderEvent order) throws ExecutionException, InterruptedException {
-        final String defaultTopic = kafkaProperties.getTemplate().getDefaultTopic();
 
-        // Используем его при отправке сообщения
-        kafkaTemplate.send(defaultTopic, order).get();
+        kafkaTemplate.sendDefault(order).get();
 
     }
 }
