@@ -60,14 +60,7 @@ public class OrderProducerTest extends TestBase {
             .exchange()
             .expectStatus().isOk();
 
-        //проверяем что в топике есть сообщение
         final var received = consumerRecords.poll(10, TimeUnit.SECONDS);
-        //ждем асинхронное взаимодействие чтобы прочитать логи
-        /*  Awaitility.await()
-            .atMost(10, TimeUnit.SECONDS)
-            .pollInterval(500, TimeUnit.MILLISECONDS)
-            .untilAsserted(() -> assertThat(output.getOut())
-                .contains("[Producer clientId=order-producer-1]"));*/
         assertThat(received).isNotNull();
         assertThat(received.value()).startsWith("{\"product\":");
         final Header[] headers = received.headers().toArray();
