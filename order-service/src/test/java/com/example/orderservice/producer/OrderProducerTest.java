@@ -59,7 +59,7 @@ public class OrderProducerTest extends TestBase {
                 .bodyValue(orderEvent)
                 .exchange()
                 .expectStatus().isOk();
-        assertThat(output.getAll())
+        assertThat(output.getOut())
                 .contains("[Producer clientId=order-producer-1] Cluster ID:");
         //проверяем что в топике есть сообщение
         final var received = consumerRecords.poll(10, TimeUnit.SECONDS);
