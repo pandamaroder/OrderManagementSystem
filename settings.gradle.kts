@@ -11,3 +11,4 @@ rootProject.name = "demo"
 include("common")
 include("order-service")
 include("order-status-service")
+include("test-config")

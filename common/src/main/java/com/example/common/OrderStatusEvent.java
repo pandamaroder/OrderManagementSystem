@@ -1,4 +1,4 @@
-package com.example.ordersstatusservice;
+package com.example.common;
 
 
 import java.time.LocalDateTime;

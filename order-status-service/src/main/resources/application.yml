@@ -1,5 +1,5 @@
 server:
-  port: 8086
+  port: 8080
   servlet:
       context-path: /
       forward-headers-strategy: framework
@@ -8,28 +8,24 @@ server:
 spring:
   kafka:
     bootstrap-servers: localhost:9092
+    template:
+      default-topic: order-status-topic
+    topics:
+      order: order-topic
     producer:
-
       client-id: order-status-producer
       compression-type: gzip
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
-
-
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
     consumer:
-
       client-id: order-listener
       group-id: order-group
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
       auto-offset-reset: earliest
       enable-auto-commit: false
-
-
-     # transaction-id-prefix: my-transaction
-
-
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 springdoc:
     swagger-ui:
@@ -38,5 +34,6 @@ springdoc:
 
 swagger:
     info:
-        title: "API News Service"
-        description: "Backend сервис для приложения «Новостной сервис»"
+        title: "Order Status Service"
+        description: "Backend сервис отслеживания новых заказов и формрования статуса заказа"
+

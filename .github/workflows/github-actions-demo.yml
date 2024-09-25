@@ -3,8 +3,10 @@ name: Java CI
 on:
   push:
     branches:
-      - master
+      - '*'  # Запускать при пуше в любую ветку
   pull_request:
+    branches:
+      - '*'  # Запускать при любом pull request в любую ветку
 
 jobs:
   build:
@@ -46,10 +48,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew build
-
-      - name: Archive test report
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-report
-          path: build/reports/tests/test/

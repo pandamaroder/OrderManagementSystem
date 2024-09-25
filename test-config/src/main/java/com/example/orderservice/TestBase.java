@@ -1,10 +1,11 @@
 package com.example.orderservice;
 
 import jakarta.annotation.Nonnull;
+import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.test.context.ActiveProfiles;
@@ -14,32 +15,30 @@ import org.threeten.extra.MutableClock;
 
 import java.time.*;
 
-@SuppressWarnings("PMD.ExcessiveImports")
-@ActiveProfiles("test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = TestBase.CustomClockConfiguration.class, initializers = KafkaInitializer.class)
+@ContextConfiguration(initializers = KafkaInitializer.class) //Запуск in-memory Kafka: @EmbeddedKafka(partitions = 1, topics = {"order-topic", "order-status-topic"})
+@ActiveProfiles("test")
 public abstract class TestBase {
-
 
     static final LocalDateTime BEFORE_MILLENNIUM = LocalDateTime.of(1999, Month.DECEMBER, 31, 23, 59, 59);
 
     @Autowired
-    protected Clock clock;
-
-    @Autowired
     protected WebTestClient webTestClient;
-
-    @Autowired
-    protected MutableClock mutableClock;
-
-    @LocalServerPort
-    protected int port;
-
 
     static Instant getTestInstant() {
         return BEFORE_MILLENNIUM.toInstant(ZoneOffset.UTC);
     }
 
+    @AfterEach
+    void resetClock() {
+        mutableClock.setInstant(getTestInstant());
+    }
+
+    @Autowired
+    protected MutableClock mutableClock;
+
+    @Autowired
+    protected Clock clock;
 
     @TestConfiguration
     static class CustomClockConfiguration {
@@ -47,11 +46,6 @@ public abstract class TestBase {
         @Bean
         public MutableClock mutableClock() {
             return MutableClock.of(getTestInstant(), ZoneOffset.UTC);
-        }
-
-        @Bean
-        public LocalDateTime fixedDateTime() {
-            return LocalDateTime.ofInstant(getTestInstant(), ZoneOffset.UTC);
         }
 
         @Bean
