@@ -22,11 +22,11 @@ public class OrderListener {
     @KafkaListener(topics = "${spring.kafka.topics.order}")
     public void listen(ConsumerRecord<String, OrderEvent> consumerRecord) throws ExecutionException, InterruptedException {
         log.info("Received order event: {}", consumerRecord.value());
-        //consumerRecord.value().toString() - ???? почему на этом падает?
+        final String stringFromValue = consumerRecord.value().toString();
+        log.info("Order event as a String: {}", stringFromValue);
         LocalDateTime now = LocalDateTime.now();
-
-        // Создаем новое событие статуса заказа
-        OrderStatusEvent orderStatusEvent = new OrderStatusEvent("PROCESSED", now);
+        // формируем событие для топика order Status
+        OrderStatusEvent orderStatusEvent = new OrderStatusEvent("PROCESSED", now, consumerRecord.value());
 
         // Отправляем событие в деф топик сервиса по OrderStatusEvent
         kafkaTemplate.sendDefault(orderStatusEvent).get();

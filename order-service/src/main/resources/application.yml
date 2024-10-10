@@ -24,6 +24,10 @@ spring:
       client-id: order-status-listener
       enable-auto-commit: false
       group-id: order-status-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+          spring.json.trusted.packages: "com.example.common"
 
 springdoc:
     swagger-ui:

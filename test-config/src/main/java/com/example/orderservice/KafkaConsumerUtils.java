@@ -13,7 +13,7 @@ import org.springframework.kafka.test.utils.KafkaTestUtils;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
-//@UtilityClass - не работает
+///@UtilityClass - не работает
 public class KafkaConsumerUtils {
 
     public static KafkaMessageListenerContainer<String, String> setUpKafkaConsumer(
