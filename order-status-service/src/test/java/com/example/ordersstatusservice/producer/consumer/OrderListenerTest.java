@@ -36,15 +36,14 @@ public class OrderListenerTest extends TestBase {
         final OrderEvent orderEvent = new OrderEvent("Tproduct", 1);
         final String orderTopic = environment.getProperty("spring.kafka.topics.order");
         kafkaTemplate.send(orderTopic, orderEvent);
-
+        // Почему в логе нет сообщений от продьюсера??? Ведь запущен полный инстанс
         Awaitility.await()
             .atMost(10, TimeUnit.SECONDS)
             .pollInterval(500, TimeUnit.MILLISECONDS)
             .untilAsserted(() -> {
                 // Проверяем, что лог содержит нужные сообщения
                 assertThat(output.getOut())
-                    //.contains("Received message: OrderStatusEvent[status=Order Shipped") // сделать более читаемую конструкцию
-                    .contains("Received order event: {\"product\":\"Tproduct\",\"quantity\":1}");
+                    .contains("OrderEvent[product=Tproduct, quantity=1]");
             });
 
     }

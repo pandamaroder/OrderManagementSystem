@@ -52,6 +52,7 @@ public class OrderProducerTest extends TestBase {
     @Test
     void sentOrderEventProducerTest(final CapturedOutput output) throws InterruptedException {
         final OrderEvent orderEvent = new OrderEvent("product", 1);
+
         webTestClient.post()
             .uri("/order")
             .accept(MediaType.APPLICATION_JSON)

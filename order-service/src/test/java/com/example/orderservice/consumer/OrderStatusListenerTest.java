@@ -1,5 +1,6 @@
 package com.example.orderservice.consumer;
 
+import com.example.common.OrderEvent;
 import com.example.common.OrderStatusEvent;
 import com.example.orderservice.TestBase;
 import org.awaitility.Awaitility;
@@ -30,20 +31,21 @@ public class OrderStatusListenerTest extends TestBase {
 
     @Test
     public void testKafkaListenerReadOrderStatus(CapturedOutput output) throws InterruptedException, ExecutionException {
-
-        final OrderStatusEvent orderStatusEvent = new OrderStatusEvent("Order Shipped", LocalDateTime.now());
+        final OrderEvent orderEvent = new OrderEvent("product", 1);
+        final OrderStatusEvent orderStatusEvent = new OrderStatusEvent("Order Shipped", LocalDateTime.now(), orderEvent);
 
         final String orderStatusTopic = environment.getProperty("spring.kafka.topics.order-status");
-        //отправляем в  топик через тестовый продьюсер
+        //отправляем в  топик через тестовый продьюсер; ждем запись в лог о вычитке из топика OrderStatus topic -> OrderStatusListenerом
         kafkaTemplate.send(orderStatusTopic, orderStatusEvent).get();
-        //ждем запись в лог
+        //ждем запись в лог о вычитке из топика OrderStatus topic -> OrderStatusListenerом
         Awaitility.await()
                 .atMost(10, TimeUnit.SECONDS)
                 .pollInterval(500, TimeUnit.MILLISECONDS)
                 .untilAsserted(() -> {
                     // Проверяем, что лог содержит нужные сообщения
                     assertThat(output.getOut())
-                            //.contains("Received message: OrderStatusEvent[status=Order Shipped") // сделать более читаемую конструкцию
+                            .contains("Received message: OrderStatusEvent[status=Order Shipped")
+                            .contains("event=OrderEvent[product=product, quantity=1]]")
                             .contains("Key: null; Partition: 0; Topic: " + orderStatusTopic);
                 });
     }

@@ -76,11 +76,12 @@ public class OrderStatusProducerTest extends TestBase {
     void testProducerSentOrder() throws InterruptedException {
         final String orderTopic = environment.getProperty("spring.kafka.topics.order");
         // Отправляем сообщение в order-topic
-        OrderEvent orderEvent = new OrderEvent("product", 1);
+        OrderEvent orderEvent = new OrderEvent("testProducerOrderStatusProduct", 1);
         kafkaTemplate.send(orderTopic, orderEvent);
         final var received = orderEventsQueue.poll(10, TimeUnit.SECONDS);
-        // проверили что в OrderEvent топике есть точно сообщение которое нужно вычитать == PRE CONDITION для  продьюсера
+        // проверили что в OrderEvent топике- есть точно сообщение которое нужно вычитать == PRE CONDITION для  продьюсера
         assertThat(received).isNotNull();
+        // в очереди String -> container.setupMessageListener((MessageListener<String, String>) consumerRecords::add);
         assertThat(received.value()).startsWith("{\"product\":");
 
         AtomicReference<ConsumerRecord<String, String>> receivedOrderStatusEvent = new AtomicReference<>();
@@ -95,6 +96,8 @@ public class OrderStatusProducerTest extends TestBase {
 
         assertThat(receivedOrderStatusEvent).isNotNull();
         assertThat(receivedOrderStatusEvent.get().value()).startsWith("{\"status\":\"PROCESSED\",\"date\"");
+        assertThat(receivedOrderStatusEvent.get().value()).containsOnlyOnce("\"event\"");
+        assertThat(receivedOrderStatusEvent.get().value()).containsOnlyOnce("{\"product\":\"testProducerOrderStatusProduct\",\"quantity\":1}");
         final Header[] headers = receivedOrderStatusEvent.get().headers().toArray();
         final var headerNames = Arrays.stream(headers)
             .map(Header::key)
